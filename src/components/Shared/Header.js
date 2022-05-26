@@ -7,9 +7,15 @@ import Loading from './Loading';
 
 const Header = () => {
     const [user, loading] = useAuthState(auth);
+
+
+
+
     if (loading) {
         <Loading></Loading>
     }
+
+
     const handleSignOut = () => {
         signOut(auth);
     }

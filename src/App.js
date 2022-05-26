@@ -49,7 +49,7 @@ function App() {
           <Route path='addproduct' element={<RequireAdmin> <AddProduct /> </RequireAdmin>}></Route>
           <Route path='manageorders' element={<RequireAdmin> <ManageOrders /> </RequireAdmin>}></Route>
           <Route path='manageproducts' element={<RequireAdmin> <ManageProducts /> </RequireAdmin>}></Route>
-          <Route path='users' element={<RequireAdmin> <Users /> </RequireAdmin>}></Route>
+          <Route path='users' element={<RequireAdmin><Users /></RequireAdmin>}></Route>
         </Route>
 
         <Route path='*' element={<NotFound />}></Route>

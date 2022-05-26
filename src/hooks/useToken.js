@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../firebase.init";
 
-const useToken = user => {
+const useToken = cUser => {
     const [token, setToken] = useState('');
+    const [user] = useAuthState(auth);
+
     useEffect(() => {
-        const email = user?.user?.email;
-        const currentUser = { email: email };
+        const email = cUser?.user?.email;
+        const currentUser = { email: email, name: user?.displayName };
         if (email) {
             fetch(`http://localhost:5000/user/${email}`, {
                 method: 'PUT',
@@ -21,7 +25,7 @@ const useToken = user => {
                 })
         }
 
-    }, [user]);
+    }, [cUser, user?.displayName]);
     return [token];
 }
 

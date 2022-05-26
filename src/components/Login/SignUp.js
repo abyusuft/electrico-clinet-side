@@ -13,6 +13,9 @@ const SignUp = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const navigate = useNavigate();
+
+
+
     if (loading || updating) {
         return <Loading></Loading>
     }

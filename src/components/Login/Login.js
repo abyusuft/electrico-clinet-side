@@ -17,7 +17,7 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || "/dashboard";
-    const [token] = useToken(user);
+    const [token] = useToken(user || user1);
 
     useEffect(() => {
         if (token) {
@@ -31,9 +31,7 @@ const Login = () => {
     if (loading) {
         <Loading></Loading>
     }
-    if (user || user1) {
-        navigate(from, { replace: true });
-    }
+
 
 
     const onSubmit = data => {
