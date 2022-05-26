@@ -14,7 +14,7 @@ const Dashboard = () => {
             </div>
             <div className="drawer-side ">
                 <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-                <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+                <ul className="menu p-4 overflow-y-auto w-60 bg-base-100 text-base-content">
                     {/* <!-- All Access --> */}
                     <li><Link to='/dashboard'>My Profile</Link></li>
                     {/* <!-- User Access Access --> */}
@@ -33,7 +33,8 @@ const Dashboard = () => {
                         <>
                             <li><Link to='/dashboard/addproduct'>Add a Product</Link></li>
                             <li><Link to='/dashboard/manageorders'>Manage All Orders</Link></li>
-                            <li><Link to='/dashboard/managedoctor'>Manage Doctor</Link></li>
+                            <li><Link to='/dashboard/manageproducts'>Manage All Products</Link></li>
+                            <li><Link to='/dashboard/users'>Manage Users</Link></li>
                         </>}
                 </ul>
 
