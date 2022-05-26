@@ -6,6 +6,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loading from '../Shared/Loading';
 import SocialLogin from './SocialLogin';
+import useToken from '../../hooks/useToken';
+import { useEffect } from 'react';
 
 const Login = () => {
     const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
@@ -15,6 +17,13 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || "/dashboard";
+    const [token] = useToken(user);
+
+    useEffect(() => {
+        if (token) {
+            navigate(from, { replace: true });
+        }
+    }, [token, from, navigate])
 
     if (error) {
         toast(`Error: ${error?.message}`);
