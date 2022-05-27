@@ -20,9 +20,9 @@ const ManageOrders = () => {
     if (isLoading) {
         <Loading></Loading>
     }
-
+    console.log(orders);
     const handleDelete = id => {
-        const url = `http://localhost:5000/product/${id}`;
+        const url = `http://localhost:5000/order/${id}`;
         fetch(url, {
             method: 'DELETE',
             headers: {
@@ -34,10 +34,13 @@ const ManageOrders = () => {
             .then(data => {
                 if (data.deletedCount > 0) {
                     refetch();
-                    toast.success(`Item Deleted Successfully!`);
+                    toast.success(`Order Deleted Successfully!`);
                 }
 
             })
+    }
+    const handleShipment = id => {
+        console.log(id);
     }
 
 
@@ -65,10 +68,12 @@ const ManageOrders = () => {
                         <tr>
                             <th>Img</th>
                             <th>Name</th>
+                            <th>Purchase By</th>
                             <th>Price</th>
-                            <th>MOQ</th>
-                            <th>Stock</th>
-                            <th>AddedBy</th>
+                            <th>Order Qty</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -76,17 +81,23 @@ const ManageOrders = () => {
                         {orders?.map((order, index) => <tr key={order._id}>
                             <th><img src={order.img} style={{ maxHeight: '30px' }} alt="" /></th>
                             <td>{order.name}</td>
-                            <td>{order.price}</td>
-                            <td>{order.moq}</td>
-                            <td>{order.stock}</td>
-                            <td>{order.addedBy}</td>
+                            <td>{order.purchaseBy.split('@')[0]}</td>
+                            <td>${order.price}</td>
+                            <td>{order.purQty}</td>
+                            <td>{order.purQty}</td>
+                            <td>{order.paid ? 'Paid' : 'Unpaid'}</td>
+                            <td>{order.shipped ?
+                                'Shipped'
+                                : <button onClick={() => handleShipment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Ship</button>
+
+                            }</td>
                             <td>{admin && <>
-                                <label for="item-delete-modal" className="btn btn-primary modal-button btn-md">Delete</label>
+                                <label for="item-delete-modal" className="btn btn-primary modal-button btn-sm">Delete</label>
                                 <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
                                 <div className="modal modal-bottom sm:modal-middle">
                                     <div className="modal-box">
-                                        <h3 className="font-bold text-lg"> Your are Delecting : {order.name}</h3>
-                                        <p className="py-4">Are You Sure You want to delete This product! <br></br> This action cant be undone.</p>
+                                        <h3 className="font-bold text-lg"> Your are Delecting order : {order._id}</h3>
+                                        <p className="py-4">Are You Sure You want to delete This Order! <br></br> This action cant be undone.</p>
                                         <div className="modal-action">
                                             <label for="item-delete-modal" onClick={() => handleDelete(order._id)} className="btn btn-primary">Yes Proceed</label>
                                             <label for="item-delete-modal" class="btn btn-red">No</label>
