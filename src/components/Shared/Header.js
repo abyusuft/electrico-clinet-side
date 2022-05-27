@@ -8,10 +8,6 @@ import Loading from './Loading';
 const Header = () => {
     const [user, loading] = useAuthState(auth);
 
-    console.log(user);
-
-
-
     if (loading) {
         <Loading></Loading>
     }
