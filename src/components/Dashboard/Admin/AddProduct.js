@@ -1,6 +1,48 @@
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import auth from '../../../firebase.init';
+import useAdmin from '../../../hooks/useAdmin';
 
 const AddProduct = () => {
+    const [user] = useAuthState(auth);
+    const [admin] = useAdmin(user);
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const onSubmit = data => {
+        const productInfo = {
+            addedBy: user?.email,
+            name: data?.name,
+            description: data?.description,
+            price: data?.price,
+            stock: data.stock,
+            moq: data.moq,
+            img: data?.img
+        };
+
+        if (admin) {
+            fetch(`http://localhost:5000/product`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(productInfo)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data?.insertedId) {
+                        toast.success(`Item Added Successfully: ${data?.insertedId}`);
+                        reset();
+                    }
+
+                })
+
+        }
+
+    }
+
     return (
         <div>
             <div className="text-sm breadcrumbs">
@@ -18,6 +60,126 @@ const AddProduct = () => {
                         Add Product
                     </li>
                 </ul>
+            </div>
+            <h2 className='text-center my-6' ><span className=' text-3xl font-bold inline-block bg-primary text-white p-3 rounded-lg'>Add a Product</span></h2>
+            <form className='' onSubmit={handleSubmit(onSubmit)}>
+                <div className="form-control flex-row w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Product Name</span>
+                    </label>
+                    <input
+                        {...register("name", {
+                            required: {
+                                value: true,
+                                message: "Input Product Name"
+                            }
+                        })}
+                        type="text"
+                        placeholder='Type Product Name'
+                        className="input input-bordered w-full max-w-xs" />
+
+                </div>
+                <label className="label">
+                    <span className="label-text-alt text-red-500">{errors.name?.type === 'required' && `${errors?.name?.message}`}</span>
+                </label>
+                <div className="form-control flex-row w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Short Description</span>
+                    </label>
+                    <input
+                        {...register("description", {
+                            required: {
+                                value: true,
+                                message: "Input Product Description"
+                            }
+                        })}
+                        type="text"
+                        placeholder='Type Prodcut Description'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+                <label className="label">
+                    <span className="label-text-alt text-red-500">{errors.description?.type === 'required' && `${errors?.description?.message}`}</span>
+                </label>
+                <div className="form-control flex-row w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Product Img</span>
+                    </label>
+                    <input
+                        {...register("img", {
+                            required: {
+                                value: true,
+                                message: "Product Image Link"
+                            }
+                        })}
+                        type="text"
+                        placeholder='Product Image Link'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+                <label className="label">
+                    <span className="label-text-alt text-red-500">{errors.img?.type === 'required' && `${errors?.img?.message}`}</span>
+                </label>
+
+
+                <div className="form-control flex-row  w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Unit Price</span>
+                    </label>
+                    <input
+                        {...register("price", {
+                            required: {
+                                value: true,
+                                message: "Input Unit Price"
+                            }
+                        })}
+                        type="number"
+                        placeholder='Per Unit Cost'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+                <label className="label">
+                    <span className="label-text-alt text-red-500">{errors.price?.type === 'required' && `${errors?.price?.message}`}</span>
+                </label>
+                <div className="form-control flex-row  w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Opening Stock</span>
+                    </label>
+                    <input
+                        {...register("stock", {
+                            required: {
+                                value: true,
+                                message: "Input Stock Qty"
+                            }
+                        })}
+                        type="number"
+                        placeholder='Opening Stock'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+                <label className="label">
+                    <span className="label-text-alt text-red-500">{errors.stock?.type === 'required' && `${errors?.stock?.message}`}</span>
+                </label>
+                <div className="form-control flex-row  w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Minimum order Qty</span>
+                    </label>
+                    <input
+                        {...register("moq", {
+                            required: {
+                                value: true,
+                                message: "Input Minimum Order Qty"
+                            }
+                        })}
+                        type="number"
+                        placeholder='Minimum Order Quantity'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+                <label className="label">
+                    <span className="label-text-alt text-red-500">{errors.moq?.type === 'required' && `${errors?.moq?.message}`}</span>
+                </label>
+
+                <input type="submit" className='btn btn-primary  text-white w-full mx-auto my-5' value='Add Product' />
+            </form>
+            <div className='text-center'>
+                <Link className='btn btn-accent text-white mx-auto' to='/dashboard/manageproducts'>Manage Product</Link>
+
             </div>
         </div>
     );

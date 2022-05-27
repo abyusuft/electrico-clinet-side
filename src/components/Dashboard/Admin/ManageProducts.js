@@ -19,6 +19,8 @@ const ManageProducts = () => {
                     </li>
                 </ul>
             </div>
+
+
         </div>
     );
 };

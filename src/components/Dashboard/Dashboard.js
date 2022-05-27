@@ -15,7 +15,7 @@ const Dashboard = () => {
         <div className="drawer drawer-mobile py-6">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content  ">
-                {/* <!-- Page content here --> */}
+
 
                 <h2 className='text-2xl font-bold text-center uppercase bg-primary text-white rounded-lg py-4'>Welcome to your Dashboard</h2>
                 <Outlet />
