@@ -8,6 +8,7 @@ import Loading from './Loading';
 const Header = () => {
     const [user, loading] = useAuthState(auth);
 
+    console.log(user);
 
 
 
@@ -26,7 +27,7 @@ const Header = () => {
         {user ? <>
             <li><Link className='font-bold' to='/dashboard'>Dashboard</Link></li>
             <li> <span className='font-bold text-primary'> </span></li>
-            <li><span onClick={handleSignOut} className='btn btn-primary  font-bold text-white'>{`${user?.displayName} :`} SignOut</span></li>
+            <li><span onClick={handleSignOut} className='btn btn-primary  font-bold text-white'> {`${user?.displayName} :`} SignOut</span></li>
         </>
             :
             <Link className='btn btn-primary font-bold text-white' to='/login'>Login</Link>}
