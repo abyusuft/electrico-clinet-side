@@ -22,6 +22,7 @@ import ManageProducts from './components/Dashboard/Admin/ManageProducts';
 import Users from './components/Dashboard/Admin/Users';
 import Purchase from './components/Dashboard/Purchase';
 import Payment from './components/Dashboard/Payment';
+import PurchaseItem from './components/Dashboard/PurchaseItem';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path='myorders' element={<MyOrders />}></Route>
           <Route path='addreview' element={<AddReview />}></Route>
           <Route path='purchase' element={<Purchase />}></Route>
+          <Route path='purchase/:itemId' element={<PurchaseItem />}></Route>
           <Route path='payment' element={<Payment />}></Route>
 
 

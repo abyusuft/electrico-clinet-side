@@ -1,6 +1,46 @@
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+import auth from '../../../firebase.init';
+import useAdmin from '../../../hooks/useAdmin';
+import Loading from '../../Shared/Loading';
 
 const ManageOrders = () => {
+    const [user] = useAuthState(auth)
+    const [admin] = useAdmin(user);
+    const { data: orders, isLoading, refetch } = useQuery('manageProduct', () => fetch(`http://localhost:5000/orders`, {
+        method: 'GET',
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+
+    }).then(res => res.json()));
+
+    if (isLoading) {
+        <Loading></Loading>
+    }
+
+    const handleDelete = id => {
+        const url = `http://localhost:5000/product/${id}`;
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+                    refetch();
+                    toast.success(`Item Deleted Successfully!`);
+                }
+
+            })
+    }
+
+
     return (
         <div>
             <div className="text-sm breadcrumbs">
@@ -18,6 +58,50 @@ const ManageOrders = () => {
                         Manage Orders
                     </li>
                 </ul>
+            </div>
+            <div className="overflow-x-auto mt-6">
+                <table className="table w-full ">
+                    <thead>
+                        <tr>
+                            <th>Img</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>MOQ</th>
+                            <th>Stock</th>
+                            <th>AddedBy</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orders?.map((order, index) => <tr key={order._id}>
+                            <th><img src={order.img} style={{ maxHeight: '30px' }} alt="" /></th>
+                            <td>{order.name}</td>
+                            <td>{order.price}</td>
+                            <td>{order.moq}</td>
+                            <td>{order.stock}</td>
+                            <td>{order.addedBy}</td>
+                            <td>{admin && <>
+                                <label for="item-delete-modal" className="btn btn-primary modal-button btn-md">Delete</label>
+                                <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
+                                <div className="modal modal-bottom sm:modal-middle">
+                                    <div className="modal-box">
+                                        <h3 className="font-bold text-lg"> Your are Delecting : {order.name}</h3>
+                                        <p className="py-4">Are You Sure You want to delete This product! <br></br> This action cant be undone.</p>
+                                        <div className="modal-action">
+                                            <label for="item-delete-modal" onClick={() => handleDelete(order._id)} className="btn btn-primary">Yes Proceed</label>
+                                            <label for="item-delete-modal" class="btn btn-red">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </>
+
+                            }</td>
+                        </tr>)}
+                    </tbody>
+                </table>
+
+
             </div>
         </div>
     );
