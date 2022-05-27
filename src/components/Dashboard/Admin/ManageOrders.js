@@ -1,14 +1,12 @@
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
-import auth from '../../../firebase.init';
-import useAdmin from '../../../hooks/useAdmin';
+
 import Loading from '../../Shared/Loading';
+import ManageOrderItem from './ManageOrderItem';
 
 const ManageOrders = () => {
-    const [user] = useAuthState(auth)
-    const [admin] = useAdmin(user);
+
     const { data: orders, isLoading, refetch } = useQuery('manageProduct', () => fetch(`http://localhost:5000/orders`, {
         method: 'GET',
         headers: {
@@ -20,7 +18,6 @@ const ManageOrders = () => {
     if (isLoading) {
         <Loading></Loading>
     }
-    console.log(orders);
     const handleDelete = id => {
         const url = `http://localhost:5000/order/${id}`;
         fetch(url, {
@@ -28,13 +25,13 @@ const ManageOrders = () => {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
-
         })
             .then(res => res.json())
             .then(data => {
                 if (data.deletedCount > 0) {
+                    console.log(data, id);
                     refetch();
-                    toast.success(`Order Deleted Successfully!`);
+                    toast.success(`Order id : ${id} Deleted Successfully! `);
                 }
 
             })
@@ -78,37 +75,14 @@ const ManageOrders = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders?.map((order, index) => <tr key={order._id}>
-                            <th><img src={order.img} style={{ maxHeight: '30px' }} alt="" /></th>
-                            <td>{order.name}</td>
-                            <td>{order.purchaseBy.split('@')[0]}</td>
-                            <td>${order.price}</td>
-                            <td>{order.purQty}</td>
-                            <td>{order.purQty}</td>
-                            <td>{order.paid ? 'Paid' : 'Unpaid'}</td>
-                            <td>{order.shipped ?
-                                'Shipped'
-                                : <button onClick={() => handleShipment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Ship</button>
+                        {orders?.map(order => <ManageOrderItem
+                            key={order._id}
+                            order={order}
+                            handleDelete={handleDelete}
+                            handleShipment={handleShipment}
+                        >
 
-                            }</td>
-                            <td>{admin && <>
-                                <label for="item-delete-modal" className="btn btn-primary modal-button btn-sm">Delete</label>
-                                <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
-                                <div className="modal modal-bottom sm:modal-middle">
-                                    <div className="modal-box">
-                                        <h3 className="font-bold text-lg"> Your are Delecting order : {order._id}</h3>
-                                        <p className="py-4">Are You Sure You want to delete This Order! <br></br> This action cant be undone.</p>
-                                        <div className="modal-action">
-                                            <label for="item-delete-modal" onClick={() => handleDelete(order._id)} className="btn btn-primary">Yes Proceed</label>
-                                            <label for="item-delete-modal" class="btn btn-red">No</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </>
-
-                            }</td>
-                        </tr>)}
+                        </ManageOrderItem>)}
                     </tbody>
                 </table>
 

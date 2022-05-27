@@ -1,6 +1,23 @@
-import React from 'react';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import Loading from '../Shared/Loading';
 
 const Payment = () => {
+    const { itemId } = useParams();
+
+    const { data: orderItem, isLoading } = useQuery('homeProduct', () => fetch(`http://localhost:5000/order/${itemId}`, {
+        method: 'GET',
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    }).then(res => res.json()));
+
+
+    if (isLoading) {
+        <Loading></Loading>
+    }
+    console.log(orderItem)
+
     return (
         <div>
             <div className="text-sm breadcrumbs">
@@ -18,6 +35,18 @@ const Payment = () => {
                         Payment
                     </li>
                 </ul>
+            </div>
+            <div>
+                <div className="card lg:card-side bg-base-100 shadow-xl">
+                    <figure className='p-12'><img src={orderItem?.img} alt="Album" /></figure>
+                    <div className="card-body">
+                        <h2 className="card-title">{orderItem?.name}</h2>
+                        <p>{orderItem?.description}</p>
+                        <p className='text-xl'>Minimum Order Qty : <strong>{orderItem?.moq}</strong></p>
+                        <p className='text-xl'>Current Stock : <strong>{orderItem?.stock}</strong></p>
+                        <p className=' text-2xl font-bold'>Unit Price : ${orderItem?.price}</p>
+                    </div>
+                </div>
             </div>
         </div>
     );

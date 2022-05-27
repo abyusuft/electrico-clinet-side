@@ -1,6 +1,46 @@
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import auth from '../../firebase.init';
+import Loading from '../Shared/Loading';
 
 const MyOrders = () => {
+    const [user] = useAuthState(auth);
+    const { data: orders, isLoading, refetch } = useQuery('myOrders', () => fetch(`http://localhost:5000/order/${user.email}`, {
+        method: 'GET',
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+
+    }).then(res => res.json()));
+
+    if (isLoading) {
+        <Loading></Loading>
+    }
+    const handleCancleOrder = id => {
+        const url = `http://localhost:5000/order/${id}`;
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+                    console.log(data, id);
+                    refetch();
+                    toast.success(`Order id : ${id} Cancelled Successfully! `);
+                }
+
+            })
+    }
+    const navigate = useNavigate();
+    const handlePayment = (id) => {
+        navigate(`/dashboard/payment/${id}`);
+    }
     return (
         <div>
             <div className="text-sm breadcrumbs">
@@ -18,6 +58,61 @@ const MyOrders = () => {
                         My Orders
                     </li>
                 </ul>
+            </div>
+            <div className="overflow-x-auto mt-6">
+                <table className="table w-full ">
+                    <thead>
+                        <tr>
+                            <th>Img</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Order Qty</th>
+                            <th>Total</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orders?.map(order => <tr key={order._id}>
+                            <td><img src={order.img} style={{ maxHeight: '30px' }} alt="" /></td>
+                            <td>{order.name}</td>
+                            <td>${order.price}</td>
+                            <td>{order.purQty}</td>
+                            <td>{order.totalPrice}</td>
+                            <td>{order.paid ? 'Paid' : <button onClick={() => handlePayment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Pay</button>}</td>
+                            <td>{order.shipped ?
+                                order.shipped
+                                : 'Pending'
+
+                            }
+                            </td>
+                            {/* <td><button onClick={() => click(order._id)}>delete</button></td> */}
+
+                            <td>{!order.paid && <>
+                                <label htmlFor="item-delete-modal" className="btn btn-primary modal-button btn-sm">Cancel</label>
+                                <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
+                                <div className="modal modal-bottom sm:modal-middle">
+                                    <div className="modal-box">
+                                        <h3 className="font-bold text-lg"> Your are Delecting order : {order._id}</h3>
+                                        <p className="py-4">Are You Sure You want to delete This Order! <br></br> This action cant be undone.</p>
+                                        <div className="modal-action">
+                                            <label htmlFor="item-delete-modal" onClick={() => handleCancleOrder(order._id)} className="btn btn-primary text-white">Yes Proceed</label>
+                                            <label htmlFor="item-delete-modal" className="btn border-0 bg-red-500 text-white">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </>
+
+                            }</td>
+                        </tr>
+
+                        )}
+                    </tbody>
+                </table>
+
+
             </div>
         </div>
     );

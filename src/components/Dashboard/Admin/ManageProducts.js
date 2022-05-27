@@ -22,6 +22,7 @@ const ManageProducts = () => {
     }
 
     const handleDelete = id => {
+
         const url = `http://localhost:5000/product/${id}`;
         fetch(url, {
             method: 'DELETE',
@@ -72,7 +73,7 @@ const ManageProducts = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products?.map((product, index) => <tr key={product._id}>
+                        {products?.map(product => <tr key={product._id}>
                             <th><img src={product.img} style={{ maxHeight: '30px' }} alt="" /></th>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
@@ -80,15 +81,15 @@ const ManageProducts = () => {
                             <td>{product.stock}</td>
                             <td>{product.addedBy}</td>
                             <td>{admin && <>
-                                <label for="item-delete-modal" className="btn btn-primary modal-button btn-md">Delete</label>
+                                <label htmlFor="item-delete-modal" className="btn btn-primary modal-button btn-md">Delete</label>
                                 <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
                                 <div className="modal modal-bottom sm:modal-middle">
                                     <div className="modal-box">
-                                        <h3 className="font-bold text-lg"> Your are Delecting : {product.name}</h3>
+                                        <h3 className="font-bold text-lg"> Your are Delecting : {product._id}</h3>
                                         <p className="py-4">Are You Sure You want to delete This product! <br></br> This action cant be undone.</p>
                                         <div className="modal-action">
-                                            <label for="item-delete-modal" onClick={() => handleDelete(product._id)} className="btn btn-primary">Yes Proceed</label>
-                                            <label for="item-delete-modal" class="btn btn-red">No</label>
+                                            <label htmlFor="item-delete-modal" onClick={() => handleDelete(product._id)} className="btn btn-primary">Yes Proceed</label>
+                                            <label htmlFor="item-delete-modal" className="btn btn-red">No</label>
                                         </div>
                                     </div>
                                 </div>

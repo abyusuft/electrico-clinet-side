@@ -44,7 +44,7 @@ function App() {
           <Route path='addreview' element={<AddReview />}></Route>
           <Route path='purchase' element={<Purchase />}></Route>
           <Route path='purchase/:itemId' element={<PurchaseItem />}></Route>
-          <Route path='payment' element={<Payment />}></Route>
+          <Route path='payment/:itemId' element={<Payment />}></Route>
 
 
           {/* Admin Acces  */}

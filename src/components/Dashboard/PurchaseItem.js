@@ -10,13 +10,10 @@ import Loading from '../Shared/Loading';
 
 const PurchaseItem = () => {
     const [user] = useAuthState(auth);
+
     const [admin] = useAdmin(user);
     const { itemId } = useParams();
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [loadTotal, setLoadTotal] = useState(0);
-    useEffect(() => {
-        setTotalPrice(loadTotal);
-    }, [totalPrice, loadTotal])
+
 
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -30,6 +27,11 @@ const PurchaseItem = () => {
     if (isLoading) {
         <Loading></Loading>
     }
+    const [totalPrice, setTotalPrice] = useState(parseInt(product?.moq) * parseInt(product?.price));
+    const [loadTotal, setLoadTotal] = useState(parseInt(product?.moq) * parseInt(product?.price));
+    useEffect(() => {
+        setTotalPrice(loadTotal);
+    }, [totalPrice, loadTotal])
 
 
     const onSubmit = data => {
@@ -44,16 +46,25 @@ const PurchaseItem = () => {
         if (purQty > curStock) {
             return toast.error(`Quantity on hand : ${curStock}`)
         }
+        if (purQty > curStock) {
+            return toast.error(`Quantity on hand : ${curStock}`)
+        } if (totalPrice <= 0 && isNaN(totalPrice)) {
+            return;
+        }
         else {
             const purchaseInfo = {
                 productId: product?._id,
                 purchaseBy: user?.email,
+                buyerName: user?.displayName,
                 name: product?.name,
                 description: product?.description,
                 price: price,
                 totalPrice: totalPrice,
                 purQty: purQty,
-                img: product?.img
+                img: product?.img,
+                address: data?.address,
+                phone: data?.phone
+
             };
 
             if (!admin) {
@@ -154,8 +165,11 @@ const PurchaseItem = () => {
                                             message: "Purchase Qty is Required"
                                         }
                                     })}
+                                    min={product?.moq}
+                                    max={product?.stock}
                                     type="number"
-                                    onBlur={getTotalPrice}
+                                    onChange={getTotalPrice}
+                                    defaultValue={product?.moq}
                                     placeholder="Input Order Qty"
                                     className="input input-bordered w-full max-w-xs" />
                                 <label className="label">
@@ -170,9 +184,38 @@ const PurchaseItem = () => {
                                         {...register("totalPrice")}
                                         type="number"
                                         value={totalPrice}
-                                        disabled
+                                        readOnly
                                         className="font-bold text-primary text-2xl" />
                                 </label>
+                            </div>
+                            <div className="form-control w-full max-w-xs">
+                                <label className="label">
+                                    <span className="label-text font-bold">Phone</span>
+                                </label>
+                                <input
+                                    {...register("phone", {
+                                        required: {
+                                            value: true,
+                                            message: "Purchase Qty is Required"
+                                        }
+                                    })}
+                                    type="number"
+                                    placeholder="Input Phone Number"
+                                    className="input input-bordered w-full max-w-xs" />
+                                <label className="label">
+                                    <span className="label-text-alt text-red-500">{errors.phone?.type === 'required' && `${errors?.phone?.message}`}</span>
+
+                                </label>
+                            </div>
+                            <div className="form-control w-full max-w-xs">
+                                <label className="label">
+                                    <span className="label-text font-bold">Address (Optional)</span>
+                                </label>
+                                <input
+                                    {...register("address")}
+                                    type="text"
+                                    placeholder="Input delivery address"
+                                    className="input input-bordered w-full max-w-xs" />
 
                             </div>
                             <input type="submit" className='btn btn-primary text-white w-full max-w-xs mt-3' value='Buy Now' />
