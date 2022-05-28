@@ -9,7 +9,7 @@ import Loading from '../../Shared/Loading';
 const ManageProducts = () => {
     const [user] = useAuthState(auth)
     const [admin] = useAdmin(user);
-    const { data: products, isLoading, refetch } = useQuery('manageProduct', () => fetch(`http://localhost:5000/product`, {
+    const { data: products, isLoading, refetch } = useQuery('manageProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -23,7 +23,7 @@ const ManageProducts = () => {
 
     const handleDelete = id => {
 
-        const url = `http://localhost:5000/product/${id}`;
+        const url = `https://ancient-meadow-60272.herokuapp.com/product/${id}`;
         fetch(url, {
             method: 'DELETE',
             headers: {

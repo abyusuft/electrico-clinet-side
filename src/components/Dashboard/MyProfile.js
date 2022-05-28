@@ -8,7 +8,7 @@ import Loading from '../Shared/Loading';
 
 const MyProfile = () => {
     const [user] = useAuthState(auth);
-    const { data: userProfile, isLoading, refetch } = useQuery('userProfile', () => fetch(`http://localhost:5000/user/${user?.email}`, {
+    const { data: userProfile, isLoading, refetch } = useQuery('userProfile', () => fetch(`https://ancient-meadow-60272.herokuapp.com/user/${user?.email}`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -36,7 +36,7 @@ const MyProfile = () => {
             img: data?.img ? data?.img : userProfile?.img
         };
         if (user?.email) {
-            fetch(`http://localhost:5000/user/${user.email}`, {
+            fetch(`https://ancient-meadow-60272.herokuapp.com/user/${user.email}`, {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'

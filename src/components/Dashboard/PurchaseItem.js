@@ -17,7 +17,7 @@ const PurchaseItem = () => {
 
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const { data: product, isLoading, refetch } = useQuery('homeProduct', () => fetch(`http://localhost:5000/product/${itemId}`, {
+    const { data: product, isLoading, refetch } = useQuery('homeProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product/${itemId}`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -69,7 +69,7 @@ const PurchaseItem = () => {
 
             if (!admin) {
                 // Purchae product 
-                fetch(`http://localhost:5000/purchase`, {
+                fetch(`https://ancient-meadow-60272.herokuapp.com/purchase`, {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json',
@@ -96,7 +96,7 @@ const PurchaseItem = () => {
 
                 const newStockQty = curStock - purQty;
                 const updateQty = { newStockQty };
-                fetch(`http://localhost:5000/product/${product?._id}`, {
+                fetch(`https://ancient-meadow-60272.herokuapp.com/product/${product?._id}`, {
                     method: 'PUT',
                     headers: {
                         'content-type': 'application/json',

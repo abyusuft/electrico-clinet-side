@@ -23,7 +23,7 @@ const AddProduct = () => {
         };
 
         if (admin) {
-            fetch(`http://localhost:5000/product`, {
+            fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'

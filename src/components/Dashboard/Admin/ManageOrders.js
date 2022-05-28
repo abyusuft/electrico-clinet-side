@@ -7,7 +7,7 @@ import ManageOrderItem from './ManageOrderItem';
 
 const ManageOrders = () => {
 
-    const { data: orders, isLoading, refetch } = useQuery('manageProduct', () => fetch(`http://localhost:5000/orders`, {
+    const { data: orders, isLoading, refetch } = useQuery('manageProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/orders`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -19,7 +19,7 @@ const ManageOrders = () => {
         <Loading></Loading>
     }
     const handleDelete = id => {
-        const url = `http://localhost:5000/order/${id}`;
+        const url = `https://ancient-meadow-60272.herokuapp.com/order/${id}`;
         fetch(url, {
             method: 'DELETE',
             headers: {

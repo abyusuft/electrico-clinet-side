@@ -5,7 +5,7 @@ import Loading from '../../Shared/Loading';
 import ProductInfo from './ProductInfo';
 
 const Products = () => {
-    const { data: products, isLoading } = useQuery('homeProduct', () => fetch(`http://localhost:5000/product`, {
+    const { data: products, isLoading } = useQuery('homeProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`

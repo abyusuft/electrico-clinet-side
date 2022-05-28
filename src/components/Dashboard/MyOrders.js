@@ -8,7 +8,7 @@ import Loading from '../Shared/Loading';
 
 const MyOrders = () => {
     const [user] = useAuthState(auth);
-    const { data: orders, isLoading, refetch } = useQuery('myOrders', () => fetch(`http://localhost:5000/order/${user.email}`, {
+    const { data: orders, isLoading, refetch } = useQuery('myOrders', () => fetch(`https://ancient-meadow-60272.herokuapp.com/order/${user.email}`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -20,7 +20,7 @@ const MyOrders = () => {
         <Loading></Loading>
     }
     const handleCancleOrder = id => {
-        const url = `http://localhost:5000/order/${id}`;
+        const url = `https://ancient-meadow-60272.herokuapp.com/order/${id}`;
         fetch(url, {
             method: 'DELETE',
             headers: {

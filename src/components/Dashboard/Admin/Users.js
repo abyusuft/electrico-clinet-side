@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Loading from '../../Shared/Loading';
 
 const Users = () => {
-    const { data: users, isLoading, refetch } = useQuery('userlist', () => fetch(`http://localhost:5000/users`, {
+    const { data: users, isLoading, refetch } = useQuery('userlist', () => fetch(`https://ancient-meadow-60272.herokuapp.com/users`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -22,7 +22,7 @@ const Users = () => {
     }
 
     const handleMakeAdmin = email => {
-        const url = `http://localhost:5000/user/admin/${email}`;
+        const url = `https://ancient-meadow-60272.herokuapp.com/user/admin/${email}`;
         fetch(url, {
             method: 'PUT',
             headers: {
