@@ -5,7 +5,7 @@ import Loading from '../Shared/Loading';
 const Payment = () => {
     const { itemId } = useParams();
 
-    const { data: orderItem, isLoading } = useQuery('payment', () => fetch(`https://ancient-meadow-60272.herokuapp.com/order/${itemId}`, {
+    const { data: orderItem, isLoading } = useQuery('payment', () => fetch(`http://localhost:5000/payment/${itemId}`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -16,7 +16,6 @@ const Payment = () => {
     if (isLoading) {
         <Loading></Loading>
     }
-    console.log(orderItem)
 
     return (
         <div>
@@ -37,14 +36,17 @@ const Payment = () => {
                 </ul>
             </div>
             <div>
-                <div className="card lg:card-side bg-base-100 shadow-xl">
+                <div className="card lg:card-side bg-base-100">
                     <figure className='p-12'><img src={orderItem?.img} alt="Album" /></figure>
                     <div className="card-body">
-                        <h2 className="card-title">{orderItem?.name}</h2>
-                        <p>{orderItem?.description}</p>
-                        <p className='text-xl'>Minimum Order Qty : <strong>{orderItem?.moq}</strong></p>
-                        <p className='text-xl'>Current Stock : <strong>{orderItem?.stock}</strong></p>
-                        <p className=' text-2xl font-bold'>Unit Price : ${orderItem?.price}</p>
+                        <strong>Order ID: {orderItem._id}</strong>
+                        <h2 className="text-3xl font-bold"> {orderItem?.name}</h2>
+                        <p className='text-xl'>{orderItem?.description}</p>
+                        <p className='text-xl'>Unit Price: <strong>{orderItem?.price}</strong></p>
+                        <p className='text-xl'>Orderd Qty: <strong>{orderItem?.purQty}</strong></p>
+                        <p className='text-2xl font-bold'>Total Price : ${orderItem?.totalPrice}</p>
+                        <button className='btn btn-primary font-bold w-1/2'>Pay</button>
+
                     </div>
                 </div>
             </div>

@@ -80,7 +80,7 @@ const MyOrders = () => {
                             <td>${order.price}</td>
                             <td>{order.purQty}</td>
                             <td>{order.totalPrice}</td>
-                            <td>{order.paid ? 'Paid' : <button onClick={() => handlePayment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Pay</button>}</td>
+                            <td>{order.paid ? order.trId : <button onClick={() => handlePayment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Pay</button>}</td>
                             <td>{order.shipped ?
                                 order.shipped
                                 : 'Pending'
