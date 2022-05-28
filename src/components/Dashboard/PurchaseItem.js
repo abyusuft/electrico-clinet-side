@@ -13,6 +13,7 @@ const PurchaseItem = () => {
 
     const [admin] = useAdmin(user);
     const { itemId } = useParams();
+    const [pQty, setPQty] = useState(0);
 
 
 
@@ -123,6 +124,7 @@ const PurchaseItem = () => {
     const getTotalPrice = event => {
         const purQty = event.target.value;
         const price = parseInt(product?.price);
+        setPQty(purQty);
         setLoadTotal(purQty * price);
     }
 
@@ -218,7 +220,7 @@ const PurchaseItem = () => {
                                     className="input input-bordered w-full max-w-xs" />
 
                             </div>
-                            <input type="submit" className='btn btn-primary text-white w-full max-w-xs mt-3' value='Buy Now' />
+                            <input disabled={pQty < product?.moq || pQty > product?.stock} type="submit" className='btn btn-primary text-white w-full max-w-xs mt-3' value='Buy Now' />
                         </form>
                     </div>
                 </div>

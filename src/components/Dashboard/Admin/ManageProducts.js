@@ -41,6 +41,7 @@ const ManageProducts = () => {
             })
     }
 
+
     return (
         <div>
             <div className="text-sm breadcrumbs">
@@ -60,7 +61,7 @@ const ManageProducts = () => {
                 </ul>
             </div>
             <div className="overflow-x-auto my-12">
-                <table className="table ">
+                <table className="table w-full">
                     <thead>
                         <tr>
                             <th>Img</th>
@@ -81,6 +82,7 @@ const ManageProducts = () => {
                             <td>{product.stock}</td>
                             <td>{product.addedBy}</td>
                             <td>{admin && <>
+
                                 <label htmlFor="item-delete-modal" className="btn btn-primary modal-button btn-md">Delete</label>
                                 <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
                                 <div className="modal modal-bottom sm:modal-middle">
@@ -93,6 +95,7 @@ const ManageProducts = () => {
                                         </div>
                                     </div>
                                 </div>
+
 
                             </>
 

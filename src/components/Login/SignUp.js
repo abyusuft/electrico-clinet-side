@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSendEmailVerification, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import Loading from '../Shared/Loading';
 import SocialLogin from './SocialLogin';
 
 const SignUp = () => {
+    const [sendEmailVerification, sending, vError] = useSendEmailVerification(auth);
     const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
     const [updateProfile, updating, uError] = useUpdateProfile(auth);
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -16,11 +17,11 @@ const SignUp = () => {
 
 
 
-    if (loading || updating) {
+    if (loading || updating || sending) {
         return <Loading></Loading>
     }
 
-    if (error || uError) {
+    if (error || uError || vError) {
         toast(`Error: ${error?.message}` || uError?.message)
     }
 
@@ -30,6 +31,8 @@ const SignUp = () => {
     const onSubmit = async (data) => {
         await createUserWithEmailAndPassword(data.email, data.password);
         await updateProfile({ displayName: data.name });
+        await sendEmailVerification();
+        toast('Verification Email Sent');
         reset();
 
 
