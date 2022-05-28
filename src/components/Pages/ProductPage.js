@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import Loading from '../../Shared/Loading';
-import ProductInfo from './ProductInfo';
+import Loading from '../Shared/Loading';
+import ProductInfo from './Home/ProductInfo';
 
-const Products = () => {
+const ProductPage = () => {
     const { data: products, isLoading } = useQuery('homeProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
         method: 'GET',
         headers: {
@@ -21,13 +21,12 @@ const Products = () => {
     const handlePurchaseItem = (id) => {
         navigate(`dashboard/purchase/${id}`);
     }
-
     return (
         <div>
             <h2 className='text-center text-2xl lg:text-5xl font-bold uppercase p-3 mt-6'>Our Products</h2>
             <div className="product-section grid grid-cols-1 lg:grid-cols-3 gap-5 container mx-auto p-8 mt-5">
                 {
-                    products?.slice(0, 6).map(product => <ProductInfo
+                    products?.map(product => <ProductInfo
                         key={product._id}
                         product={product}
                         handlePurchaseItem={handlePurchaseItem}
@@ -39,4 +38,4 @@ const Products = () => {
     );
 };
 
-export default Products;
+export default ProductPage;
