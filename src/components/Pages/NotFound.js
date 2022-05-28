@@ -4,13 +4,13 @@ import notFound from '../../images/dddddd.png'
 
 const NotFound = () => {
     return (
-        <div class="card  bg-[#F7F7F7] shadow-xl">
-            <figure class="px-10 pt-10">
+        <div className="card  bg-[#F7F7F7] shadow-xl">
+            <figure className="px-10 pt-10">
                 <img src={notFound} alt="Shoes" />
             </figure>
-            <div class="card-body items-center text-center">
-                <div class="card-actions">
-                    <Link to='/' class="btn btn-error btn-xl text-white">Back to Homepage</Link>
+            <div className="card-body items-center text-center">
+                <div className="card-actions">
+                    <Link to='/' className="btn btn-error btn-xl text-white">Back to Homepage</Link>
                 </div>
             </div>
         </div>
