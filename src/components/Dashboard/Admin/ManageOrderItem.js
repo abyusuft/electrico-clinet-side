@@ -13,9 +13,13 @@ const ManageOrderItem = ({ order, handleDelete, handleShipment }) => {
             <td>{order.purQty}</td>
             <td>{order.totalPrice}</td>
             <td>{order.paid ? 'Paid' : 'Unpaid'}</td>
-            <td>{order.paid ?
+            <td>{order.ship ?
                 'Shipped'
-                : <button onClick={() => handleShipment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Ship</button>
+                : <button disabled={!order.paid} onClick={() => handleShipment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>
+                    {
+                        !order.paid ? 'Pending' :
+                            'Ship'}
+                </button>
 
             }
             </td>
