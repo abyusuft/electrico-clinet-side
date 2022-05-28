@@ -1,11 +1,12 @@
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Loading from '../Shared/Loading';
 
 const Payment = () => {
     const { itemId } = useParams();
 
-    const { data: orderItem, isLoading } = useQuery('payment', () => fetch(`https://ancient-meadow-60272.herokuapp.com/payment/${itemId}`, {
+    const { data: orderItem, isLoading, refetch } = useQuery('payment', () => fetch(`https://ancient-meadow-60272.herokuapp.com/payment/${itemId}`, {
         method: 'GET',
         headers: {
             'authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -15,6 +16,30 @@ const Payment = () => {
 
     if (isLoading) {
         <Loading></Loading>
+    }
+    console.log(orderItem?.productId)
+    const navigate = useNavigate();
+    const handlePayment = (id) => {
+        const url = `https://ancient-meadow-60272.herokuapp.com/paid/${id}`;
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => {
+                if (res.status === 403) {
+                    toast.error('Unauthorised');
+                }
+                return res.json()
+            })
+            .then(data => {
+                if (data.modifiedCount > 0) {
+                    navigate('/dashboard/myorders');
+                    refetch();
+                    toast.success(`Order Shipped Successfully`);
+                }
+            })
     }
 
     return (
@@ -45,7 +70,7 @@ const Payment = () => {
                         <p className='text-xl'>Unit Price: <strong>{orderItem?.price}</strong></p>
                         <p className='text-xl'>Orderd Qty: <strong>{orderItem?.purQty}</strong></p>
                         <p className='text-2xl font-bold'>Total Price : ${orderItem?.totalPrice}</p>
-                        <button className='btn btn-primary font-bold w-1/2'>Pay</button>
+                        <button onClick={() => handlePayment(orderItem?._id)} className='btn btn-primary font-bold w-1/2'>Pay</button>
 
                     </div>
                 </div>

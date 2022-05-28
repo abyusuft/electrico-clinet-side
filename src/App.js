@@ -23,7 +23,6 @@ import Users from './components/Dashboard/Admin/Users';
 import Purchase from './components/Dashboard/Purchase';
 import Payment from './components/Dashboard/Payment';
 import PurchaseItem from './components/Dashboard/PurchaseItem';
-import ProductPage from './components/Pages/ProductPage';
 
 function App() {
   return (
@@ -34,7 +33,6 @@ function App() {
         <Route path='/home' element={<Home />}></Route>
         <Route path='/blog' element={<Blog />}></Route>
         <Route path='/portfolio' element={<Portfolio />}></Route>
-        <Route path='/products' element={<ProductPage />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/signup' element={<SignUp />}></Route>
         <Route path='/dashboard' element={<RequireAuth><Dashboard /></RequireAuth>}>

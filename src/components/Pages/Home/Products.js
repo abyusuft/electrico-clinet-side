@@ -25,7 +25,7 @@ const Products = () => {
             <h2 className='text-center text-2xl lg:text-5xl font-bold uppercase p-3 mt-6'>Our Products</h2>
             <div className="product-section grid grid-cols-1 lg:grid-cols-3 gap-5 container mx-auto p-8 mt-5">
                 {
-                    products?.slice(0, 6).map(product => <ProductInfo
+                    products?.map(product => <ProductInfo
                         key={product._id}
                         product={product}
                         handlePurchaseItem={handlePurchaseItem}

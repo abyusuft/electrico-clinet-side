@@ -19,7 +19,6 @@ const Header = () => {
     }
 
     const menuItem = <>
-        <li><Link className='font-bold' to='/products'>Products</Link></li>
         <li><Link className='font-bold' to='/blog'>Blog</Link></li>
         <li><Link className='font-bold' to='/portfolio'>Portfolio</Link></li>
         {user ? <>
