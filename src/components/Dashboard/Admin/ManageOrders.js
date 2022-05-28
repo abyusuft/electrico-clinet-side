@@ -29,7 +29,6 @@ const ManageOrders = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.deletedCount > 0) {
-                    console.log(data, id);
                     refetch();
                     toast.success(`Order id : ${id} Deleted Successfully! `);
                 }
@@ -37,7 +36,25 @@ const ManageOrders = () => {
             })
     }
     const handleShipment = id => {
-        console.log(id);
+        const url = `https://ancient-meadow-60272.herokuapp.com/shipment/${id}`;
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => {
+                if (res.status === 403) {
+                    toast.error('You do not have right to make and admin');
+                }
+                return res.json()
+            })
+            .then(data => {
+                if (data.modifiedCount > 0) {
+                    refetch();
+                    toast.success(`Order Shipped Successfully`);
+                }
+            })
     }
 
 

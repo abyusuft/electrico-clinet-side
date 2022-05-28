@@ -1,9 +1,7 @@
 import React from 'react';
 
 const ManageOrderItem = ({ order, handleDelete, handleShipment }) => {
-    // const click = (id) => {
-    //     console.log(id)
-    // }
+
     return (<>
 
 
@@ -15,7 +13,7 @@ const ManageOrderItem = ({ order, handleDelete, handleShipment }) => {
             <td>{order.purQty}</td>
             <td>{order.totalPrice}</td>
             <td>{order.paid ? 'Paid' : 'Unpaid'}</td>
-            <td>{order.shipped ?
+            <td>{order.ship ?
                 'Shipped'
                 : <button onClick={() => handleShipment(order._id)} className='btn btn-sm btn-secondary text-white font-bold'>Ship</button>
 

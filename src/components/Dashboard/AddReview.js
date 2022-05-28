@@ -51,7 +51,6 @@ const AddReview = () => {
                     return res.json()
                 })
                 .then(data => {
-                    console.log(data)
                     refetch();
                     toast.success(`Review Added Successfully`);
                     reset();

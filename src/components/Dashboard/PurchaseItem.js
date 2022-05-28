@@ -221,7 +221,7 @@ const PurchaseItem = () => {
                                     className="input input-bordered w-full max-w-xs" />
 
                             </div>
-                            <input disabled={pQty < product?.moq || pQty > product?.stock} type="submit" className='btn btn-primary text-white w-full max-w-xs mt-3' value='Buy Now' />
+                            <input disabled={parseInt(pQty) < parseInt(product?.moq) || parseInt(pQty) > parseInt(product?.stock)} type="submit" className='btn btn-primary text-white w-full max-w-xs mt-3' value='Buy Now' />
                         </form>
                     </div>
                 </div>
