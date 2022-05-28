@@ -5,7 +5,7 @@ import Loading from '../Shared/Loading';
 const Payment = () => {
     const { itemId } = useParams();
 
-    const { data: orderItem, isLoading } = useQuery('payment', () => fetch(`http://localhost:5000/payment/${itemId}`, {
+    const { data: orderItem, isLoading } = useQuery('payment', () => fetch(`https://ancient-meadow-60272.herokuapp.com/payment/${itemId}`, {
         method: 'GET',
         headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`

@@ -1,6 +1,56 @@
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useForm } from 'react-hook-form';
+import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+import auth from '../../firebase.init';
+import Loading from '../Shared/Loading';
 
 const AddReview = () => {
+    const [user] = useAuthState(auth);
+    const { data: userProfile, isLoading, refetch } = useQuery('userProfile', () => fetch(`https://ancient-meadow-60272.herokuapp.com/user/${user?.email}`, {
+        method: 'GET',
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+
+    }).then(res => {
+        if (res.status === 403) {
+            toast.error('Unauthorized');
+        }
+        return res.json()
+    }))
+    if (isLoading) {
+        <Loading></Loading>
+    }
+    const { register, handleSubmit, reset } = useForm();
+    const onSubmit = data => {
+        const userReview = {
+            email: user?.email,
+            name: userProfile?.name,
+            review: data?.review,
+            rating: data?.rating,
+            img: userProfile?.img
+        };
+
+        if (user?.email) {
+            fetch(`https://ancient-meadow-60272.herokuapp.com/review`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(userReview)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    refetch();
+                    toast.success(`Review Added Successfully`);
+                    reset();
+                })
+
+        }
+    }
     return (
         <div>
             <div className="text-sm breadcrumbs">
@@ -19,6 +69,33 @@ const AddReview = () => {
                     </li>
                 </ul>
             </div>
+
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="form-control flex-row w-full max-w-xl mt-1">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Rating</span>
+                    </label>
+                    <input
+                        {...register("rating")}
+                        type="number"
+                        min={1}
+                        max={5}
+                        placeholder='Insert Your Rating 1-5'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+                <div className="form-control flex-row w-full max-w-xl mt-2">
+                    <label className="label w-1/2">
+                        <span className="label-text font-bold">Review</span>
+                    </label>
+                    <input
+                        {...register("review")}
+                        type="text"
+                        placeholder='Type Review'
+                        className="input input-bordered w-full max-w-xs" />
+                </div>
+
+                <input type="submit" className='btn btn-primary  text-white w-full mx-auto my-5' value='Add Review' />
+            </form>
         </div>
     );
 };
