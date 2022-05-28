@@ -1,17 +1,20 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
+import auth from '../../../firebase.init';
 import Loading from '../../Shared/Loading';
 
 const Users = () => {
     const { data: users, isLoading, refetch } = useQuery('userlist', () => fetch(`https://ancient-meadow-60272.herokuapp.com/users`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => {
         if (res.status === 403) {
+            signOut(auth);
             toast.error('Unauthorized');
         }
         return res.json()
@@ -26,11 +29,11 @@ const Users = () => {
         fetch(url, {
             method: 'PUT',
             headers: {
-                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
-
         })
             .then(res => {
+                console.log(res);
                 if (res.status === 403) {
                     toast.error('You do not have right to make and admin');
                 }
@@ -41,7 +44,6 @@ const Users = () => {
                     refetch();
                     toast.success(`Successfully made an admin`);
                 }
-
             })
     }
 

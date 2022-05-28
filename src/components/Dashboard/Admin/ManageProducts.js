@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from 'react-query';
@@ -12,7 +13,7 @@ const ManageProducts = () => {
     const { data: products, isLoading, refetch } = useQuery('manageProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => res.json()));
@@ -27,11 +28,17 @@ const ManageProducts = () => {
         fetch(url, {
             method: 'DELETE',
             headers: {
-                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
 
         })
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 403) {
+                    signOut(auth);
+                    toast.error('Unauthorized');
+                }
+                return res.json()
+            })
             .then(data => {
                 if (data.deletedCount > 0) {
                     refetch();
@@ -87,7 +94,7 @@ const ManageProducts = () => {
                                 <input type="checkbox" id="item-delete-modal" className="modal-toggle" />
                                 <div className="modal modal-bottom sm:modal-middle">
                                     <div className="modal-box">
-                                        <h3 className="font-bold text-lg"> Your are Delecting : {product._id}</h3>
+                                        <h3 className="font-bold text-lg"> Your are Delecting : {product.name}</h3>
                                         <p className="py-4">Are You Sure You want to delete This product! <br></br> This action cant be undone.</p>
                                         <div className="modal-action">
                                             <label htmlFor="item-delete-modal" onClick={() => handleDelete(product._id)} className="btn btn-primary">Yes Proceed</label>

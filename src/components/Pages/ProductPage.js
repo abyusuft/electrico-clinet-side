@@ -8,7 +8,7 @@ const ProductPage = () => {
     const { data: products, isLoading } = useQuery('homeProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => res.json()));

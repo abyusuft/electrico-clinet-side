@@ -10,7 +10,7 @@ const ManageOrders = () => {
     const { data: orders, isLoading, refetch } = useQuery('manageProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/orders`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => res.json()));
@@ -23,7 +23,7 @@ const ManageOrders = () => {
         fetch(url, {
             method: 'DELETE',
             headers: {
-                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
             .then(res => res.json())

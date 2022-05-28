@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import auth from '../../firebase.init';
+import useToken from '../../hooks/useToken';
 import Loading from '../Shared/Loading';
 import SocialLogin from './SocialLogin';
 
@@ -14,7 +15,7 @@ const SignUp = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const navigate = useNavigate();
-
+    const [token] = useToken(user);
 
 
     if (loading || updating || sending) {
@@ -25,7 +26,7 @@ const SignUp = () => {
         toast(`Error: ${error?.message}` || uError?.message)
     }
 
-    if (user) {
+    if (token) {
         navigate('/dashboard');
     }
     const onSubmit = async (data) => {

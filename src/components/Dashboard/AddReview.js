@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
@@ -11,7 +12,7 @@ const AddReview = () => {
     const { data: userProfile, isLoading, refetch } = useQuery('userProfile', () => fetch(`https://ancient-meadow-60272.herokuapp.com/user/${user?.email}`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => {
@@ -37,18 +38,24 @@ const AddReview = () => {
             fetch(`https://ancient-meadow-60272.herokuapp.com/review`, {
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 },
                 body: JSON.stringify(userReview)
             })
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 403) {
+                        signOut(auth);
+                        toast.error('Unauthorized');
+                    }
+                    return res.json()
+                })
                 .then(data => {
                     console.log(data)
                     refetch();
                     toast.success(`Review Added Successfully`);
                     reset();
                 })
-
         }
     }
     return (

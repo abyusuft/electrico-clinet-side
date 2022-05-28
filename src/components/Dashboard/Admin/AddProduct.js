@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
@@ -26,11 +27,18 @@ const AddProduct = () => {
             fetch(`https://ancient-meadow-60272.herokuapp.com/product`, {
                 method: 'POST',
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 },
                 body: JSON.stringify(productInfo)
             })
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 403) {
+                        signOut(auth);
+                        toast.error('Unauthorized');
+                    }
+                    return res.json()
+                })
                 .then(data => {
                     if (data?.insertedId) {
                         toast.success(`Item Added Successfully: ${data?.insertedId}`);

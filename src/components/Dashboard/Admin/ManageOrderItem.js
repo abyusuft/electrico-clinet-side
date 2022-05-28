@@ -35,7 +35,7 @@ const ManageOrderItem = ({ order, handleDelete, handleShipment }) => {
                     <h3 className="font-bold text-lg"> Your are Delecting order : {order._id}</h3>
                     <p className="py-4">Are You Sure You want to delete This Order! <br></br> This action cant be undone.</p>
                     <div className="modal-action">
-                        <label htmlFor="item-delete-modal" onClick={() => handleDelete(order._id)} className="btn btn-primary text-white">Yes Proceed</label>
+                        <button htmlFor="item-delete-modal" onClick={() => handleDelete(order._id)} className="btn btn-primary text-white">Yes Proceed</button>
                         <label htmlFor="item-delete-modal" className="btn border-0 bg-red-500 text-white">No</label>
                     </div>
                 </div>

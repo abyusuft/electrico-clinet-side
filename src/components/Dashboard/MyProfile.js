@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
@@ -11,11 +12,12 @@ const MyProfile = () => {
     const { data: userProfile, isLoading, refetch } = useQuery('userProfile', () => fetch(`https://ancient-meadow-60272.herokuapp.com/user/${user?.email}`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => {
         if (res.status === 403) {
+            signOut(auth);
             toast.error('Unauthorized');
         }
         return res.json()
@@ -39,7 +41,8 @@ const MyProfile = () => {
             fetch(`https://ancient-meadow-60272.herokuapp.com/user/${user.email}`, {
                 method: 'PUT',
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 },
                 body: JSON.stringify(updatedProfileData)
             })

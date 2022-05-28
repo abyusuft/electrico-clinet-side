@@ -11,7 +11,7 @@ const MyOrders = () => {
     const { data: orders, isLoading, refetch } = useQuery('myOrders', () => fetch(`https://ancient-meadow-60272.herokuapp.com/order/${user.email}`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => res.json()));
@@ -24,7 +24,7 @@ const MyOrders = () => {
         fetch(url, {
             method: 'DELETE',
             headers: {
-                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
             .then(res => res.json())

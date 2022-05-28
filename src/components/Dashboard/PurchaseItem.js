@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
@@ -21,7 +22,7 @@ const PurchaseItem = () => {
     const { data: product, isLoading, refetch } = useQuery('homeProduct', () => fetch(`https://ancient-meadow-60272.herokuapp.com/product/${itemId}`, {
         method: 'GET',
         headers: {
-            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
 
     }).then(res => res.json()));
@@ -74,15 +75,15 @@ const PurchaseItem = () => {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json',
-                        headers: {
-                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                        }
+                        'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+
                     },
                     body: JSON.stringify(purchaseInfo)
                 })
                     .then(res => {
                         if (res.status === 403) {
-                            toast.error('You do not have right to make and admin');
+                            signOut(auth);
+                            toast.error('Unauthorized');
                         }
                         return res.json()
                     })
@@ -101,7 +102,7 @@ const PurchaseItem = () => {
                     method: 'PUT',
                     headers: {
                         'content-type': 'application/json',
-                        authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        'authorization': `Bearer ${localStorage.getItem('accessToken')}`
                     },
                     body: JSON.stringify(updateQty)
 
