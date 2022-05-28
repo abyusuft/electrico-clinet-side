@@ -10,7 +10,6 @@ const Reviews = () => {
     if (isLoading) {
         <Loading></Loading>
     }
-    console.log(reviews);
 
     return (
         <div>
@@ -29,7 +28,7 @@ const Reviews = () => {
                             <h2 className="card-title">{review?.name ? review?.name : review?.email}</h2>
                             <p>{review?.review}</p>
                             <div className="card-actions">
-                                <span class="badge border-0 text-3xl p-5 bg-primary text-white">{review?.rating}*</span>
+                                <span className="badge border-0 text-3xl p-5 bg-primary text-white">{review?.rating}*</span>
 
                             </div>
                         </div>
