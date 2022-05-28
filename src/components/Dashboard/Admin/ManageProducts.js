@@ -59,8 +59,8 @@ const ManageProducts = () => {
                     </li>
                 </ul>
             </div>
-            <div className="overflow-x-auto mt-6">
-                <table className="table w-full ">
+            <div className="overflow-x-auto my-12">
+                <table className="table ">
                     <thead>
                         <tr>
                             <th>Img</th>
@@ -74,7 +74,7 @@ const ManageProducts = () => {
                     </thead>
                     <tbody>
                         {products?.map(product => <tr key={product._id}>
-                            <th><img src={product.img} style={{ maxHeight: '30px' }} alt="" /></th>
+                            <td><img src={product.img} style={{ maxHeight: '30px' }} alt="" /></td>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
                             <td>{product.moq}</td>

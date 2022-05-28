@@ -77,12 +77,12 @@ const MyProfile = () => {
                 </ul>
             </div>
 
-            <div className="card w-full mx-auto bg-base-100">
+            <div className="card w-full mx-auto bg-base-100 px-6">
                 <figure className=" pt-1">
                     <img style={{ maxHeight: '150px' }} src={userProfile?.img ? userProfile?.img : 'https://summit.helphour.org/wp-content/uploads/2016/05/users-vector-icon-png_260862.jpg'} alt="Profile Pic" className="rounded-xl" />
                 </figure>
-                <div className="card-body items-center text-center">
-                    <h2 className="card-title uppercase text-primary font-bold">{userProfile?.name}</h2>
+                <div className=" items-center text-center ">
+                    <h2 className="text-center text-3xl uppercase text-primary font-bold">{userProfile?.name}</h2>
                     <div className="overflow-x-auto">
                         <table className="table w-full">
                             <tbody>
